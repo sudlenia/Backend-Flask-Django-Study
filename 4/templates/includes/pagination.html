@@ -1,0 +1,26 @@
+<div class="pagination">
+    <span class="step-links">
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_previous %}
+            <a class="badge bg-dark"
+               href="?page=1{% if category %}&category={{ category }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}{% if search_query %}&search_query={{ search_query }}{% endif %}"
+            >&laquo; first</a>
+            <a class="badge bg-dark"
+               href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}{% if search_query %}&search_query={{ search_query }}{% endif %}"
+            >previous</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a class="badge bg-dark"
+               href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}{% if search_query %}&search_query={{ search_query }}{% endif %}"
+            >next</a>
+            <a class="badge bg-dark"
+               href="?page={{ page_obj.paginator.num_pages }}{% if category %}&category={{ category }}{% endif %}{% if tag %}&tag={{ tag }}{% endif %}{% if search_query %}&search_query={{ search_query }}{% endif %}"
+            >last &raquo;</a>
+        {% endif %}
+    </span>
+</div>

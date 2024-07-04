@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.name }}{% endblock title %}
+{% block header %}{{ post.name }}{% endblock header %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+{% if post.featured_image %}
+<img src="{{ post.featured_image.url}}" alt="">
+{% endif %}
+
+<h2>Имя: {{ post.name }}</h2>
+
+<p>Описание: {{ post.description|striptags }}</p>
+
+<p>Пользователь: {{ post.author }}</p>
+
+
+<div>Тэги:
+  {% for tag in post.tags.all %}
+  <p class="badge bg-info">{{ tag.name }}</p>
+  {% endfor %}
+</div>
+
+<div>Категория:
+  <p class="badge bg-warning">{{ post.category }}</p>
+</div>
+
+<div class="d-flex gap-1">
+  <a class="btn btn-success" href="{% url 'post_edit' slug=post.slug %}"> Редактировать</a>
+  <a class="btn btn-danger" href="{% url 'post_delete' slug=post.slug %}"> Удалить</a>
+</div>
+
+
+<hr>
+<div class="comments">
+  <ul class="list-group"><h2>Комментарии:</h2>
+    {% for comment in comments %}
+    <li class="list-group-item"><strong>{{ comment.author }}:</strong> {{ comment.body }}</li>
+    {% empty %}
+    <p>Комментариев пока нет.</p>
+    {% endfor %}
+  </ul>
+</div>
+
+<hr>
+<h2>Оставить комментарий:</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ comment_form|crispy }}
+
+  <button class="btn btn-success" type="submit">Отправить</button>
+</form>
+
+{% endblock content %}

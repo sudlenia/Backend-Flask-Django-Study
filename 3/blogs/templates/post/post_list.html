@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Список постов{% endblock title %}
+{% block header %}Список постов{% endblock header %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<a href="{% url 'post_new' %}" class="btn btn-primary mb-3">Создать пост</a>
+{% endif %}
+
+<div class="d-flex flex-column gap-3 align-items-start mb-3">
+  <form class="d-flex gap-3" method="GET">
+    <input class="form-control" style="width: 600px;" type="text" name="search_query" placeholder="Поиск по заголовку или описанию">
+    <select class="form-select form-select-sm" name="category">
+      <option value="">Все категории</option>
+      {% for category in categories %}
+      <option value="{{ category.slug }}">{{ category.name }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-success" type="submit">Искать</button>
+  </form>
+
+  <div class="d-flex gap-3 align-items-center">
+    <h5>Категории:</h5>
+    {% for category in categories %}
+    <a href="{% url 'post_list' %}?category={{ category.slug }}" class="badge bg-warning">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+  <div class="d-flex gap-2 align-items-center">
+    <h5>Тэги:</h5>
+    {% for tag in tags %}
+    <a href="{% url 'post_list' %}?tag={{ tag.slug  }}" class="badge bg-info">{{ tag.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="d-flex flex-column gap-5 align-items-center">
+  {% for post in post_list %}
+  <div class="d-flex gap-4" style="height: 200px;">
+    {% if post.featured_image %}
+    <img src="{{ post.featured_image.url}}" style="height: 200px; width: 300px;" alt="">
+    {% endif %}
+    <div class="d-flex" style="width: 500px;">
+      <div class="d-flex flex-column gap-1">
+        <h4>{{forloop.counter}}. {{ post.name }}</h4>
+        <p>Пользователь: {{ post.author }}</p>
+        <p>Описание: {{ post.description|striptags }}</p>
+        <div>Категория:
+          <p class="badge bg-warning">{{ post.category }}</p>
+        </div>
+        <div>Тэги:
+          {% for tag in post.tags.all %}
+          <p class="badge bg-info">{{ tag.name }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="d-flex gap-1 align-items-end" style="margin: auto 0 0 auto;">
+        <a href="{{ post.get_absolute_url }}" class="btn btn-success btn-sm">Инфо</a>
+        <a href="{% url 'post_delete' slug=post.slug %}" class="btn btn-danger btn-sm">Удалить</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% include "includes/pagination.html" %}
+
+{% endblock content %}
+
+

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block title %} Регистрация {% endblock title %}
+{% block header %} Регистрация {{ post.name }}{% endblock header %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<form class="d-flex flex-column align-items-center gap-2" method="post" action="{% url 'signup' %}">
+  <h2>Регистрация</h2>
+
+  {% csrf_token %}
+  {{ form|crispy }}
+
+  <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+  <p>Помните пароль? <a class="link-info" href="{% url 'login' %}">Войдите!</a></p>
+</form>
+
+
+{% endblock content %}
